@@ -9,11 +9,16 @@ import {
   setLocalStorageItem,
 } from "./utils/localStorage";
 import { getAWeekSchedules } from "./service/computedServices";
+import styled from "styled-components";
 
 type User = {
   id: number;
   name: string;
 };
+
+const Main = styled.main`
+  position: relative;
+`;
 
 function App() {
   const [user, setUser] = useState<User>({
@@ -199,7 +204,7 @@ function App() {
   return (
     <div className="App">
       <Header content={`${user.name}'s Weekly`} />
-      <main>
+      <Main>
         <Weekly
           schedules={schedules}
           addTask={addTask}
@@ -208,7 +213,7 @@ function App() {
           updateTask={updateTask}
           updateTaskColorIndex={updateTaskColorIndex}
         />
-      </main>
+      </Main>
       <footer></footer>
     </div>
   );

@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 import { DAILY_ITEM_WIDTH } from "../../constants/template";
 import COLORS from "../../enumerations/colors";
@@ -11,7 +10,8 @@ const Wrapper = styled.div`
   margin-bottom: 1px;
 
   position: sticky;
-  top: 0;
+  top: 48px;
+  z-index: 10;
 
   background-color: ${COLORS.WHITE};
 `;
