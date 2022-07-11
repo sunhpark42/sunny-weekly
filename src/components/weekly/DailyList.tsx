@@ -61,6 +61,7 @@ interface DailyListProps {
   toggleCheckbox: (taskId: number) => void;
   deleteTask: (taskId: number) => void;
   updateTask: (taskId: number, text: string) => void;
+  updateTaskColorIndex: (taskId: number, colorIndex: string) => void;
   tasks: Task[];
 }
 
@@ -70,6 +71,7 @@ const DailyList = ({
   toggleCheckbox,
   deleteTask,
   updateTask,
+  updateTaskColorIndex,
 }: DailyListProps) => {
   const [isAdding, setIsAdding] = useState(false);
   const completeTasksCount = tasks.reduce(
@@ -79,7 +81,7 @@ const DailyList = ({
 
   return (
     <Wrapper>
-      {tasks.map(({ id, text, isChecked }) => (
+      {tasks.map(({ id, text, isChecked, colorIndex }) => (
         <DailyItem
           key={id}
           text={text}
@@ -93,6 +95,10 @@ const DailyList = ({
           updateTask={(text) => {
             updateTask(id, text);
           }}
+          colorIndex={colorIndex}
+          updateTaskColorIndex={(colorIndex) => {
+            updateTaskColorIndex(id, colorIndex);
+          }}
         />
       ))}
       <li>
@@ -104,6 +110,7 @@ const DailyList = ({
                 id: idGenerator.getId({ type: "TASK" }),
                 text,
                 isChecked: false,
+                colorIndex: "white",
               });
             }
             setIsAdding(false);

@@ -156,6 +156,46 @@ function App() {
     setLocalStorageItem(LOCAL_STORAGE_KEY.SCHEDULES, newSchedules);
   };
 
+  const updateTaskColorIndex = (
+    id: number,
+    taskId: number,
+    colorIndex: string
+  ) => {
+    const targetDayIndex = schedules.findIndex(
+      (schedule) => schedule.id === id
+    );
+    const targetDay = schedules[targetDayIndex];
+    const targetTaskIndex = targetDay.tasks.findIndex(
+      (task) => task.id === taskId
+    );
+
+    if (targetDayIndex === -1 || targetTaskIndex === -1) {
+      console.warn("해당하는 항목이 없습니다.");
+      return;
+    }
+
+    const newSchedule = {
+      ...targetDay,
+      tasks: [
+        ...targetDay.tasks.slice(0, targetTaskIndex),
+        {
+          ...targetDay.tasks[targetTaskIndex],
+          colorIndex,
+        },
+        ...targetDay.tasks.slice(targetTaskIndex + 1),
+      ],
+    };
+
+    const newSchedules = [
+      ...schedules.slice(0, targetDayIndex),
+      newSchedule,
+      ...schedules.slice(targetDayIndex + 1),
+    ];
+
+    setSchedules(newSchedules);
+    setLocalStorageItem(LOCAL_STORAGE_KEY.SCHEDULES, newSchedules);
+  };
+
   return (
     <div className="App">
       <Header content={`${user.name}'s Weekly`} />
@@ -166,6 +206,7 @@ function App() {
           toggleCheckbox={toggleCheckbox}
           deleteTask={deleteTask}
           updateTask={updateTask}
+          updateTaskColorIndex={updateTaskColorIndex}
         />
       </main>
       <footer></footer>

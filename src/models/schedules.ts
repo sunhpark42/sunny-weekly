@@ -3,6 +3,7 @@ import Day from "../enumerations/day";
 export type Task = {
   id: number;
   text: string;
+  colorIndex: string;
   isChecked: boolean;
 };
 

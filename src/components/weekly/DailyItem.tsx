@@ -20,6 +20,7 @@ const DeleteButton = styled.button`
 const Wrapper = styled.li`
   width: ${DAILY_ITEM_WIDTH};
   min-height: 48px;
+  padding-left: 10px;
 
   background-color: ${COLORS.WHITE};
 
@@ -28,6 +29,8 @@ const Wrapper = styled.li`
   grid-column-gap: 4px;
   justify-items: center;
   align-items: center;
+
+  position: relative;
 
   ${DeleteButton} {
     opacity: 0;
@@ -42,7 +45,7 @@ const Wrapper = styled.li`
   }
 `;
 
-const Checkbox = styled.label<{ isChecked: boolean }>`
+const Checkbox = styled.label<{ isChecked: boolean; color?: string }>`
   width: 22px;
   height: 22px;
 
@@ -54,10 +57,10 @@ const Checkbox = styled.label<{ isChecked: boolean }>`
   transition: background-color 80ms ease-in-out;
 
   /* TODO: 추후 아이콘으로 변경  */
-  ${({ isChecked }) =>
+  ${({ isChecked, color }) =>
     isChecked
       ? css`
-          background-color: #cecece;
+          background-color: ${color ? color : "#cecece"};
 
           position: relative;
 
@@ -67,11 +70,11 @@ const Checkbox = styled.label<{ isChecked: boolean }>`
             top: 50%;
             left: 50%;
             transform: translateX(-50%) translateY(-50%);
-            color: ${COLORS.WHITE};
+            color: ${color ? "black" : COLORS.WHITE};
           }
         `
       : css`
-          background-color: transparent;
+          background-color: ${color ? color : "transparent"};
         `}
 
   input {
@@ -113,26 +116,99 @@ const TextInput = styled.input`
   }
 `;
 
+const ColorIndex = styled.button<{ color: string }>`
+  width: 8px;
+  height: 100%;
+
+  background-color: ${({ color }) => color};
+  border: 0;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+`;
+
+const ColorSelectPopup = styled.div`
+  width: 200px;
+
+  padding: 5px;
+
+  background-color: ${COLORS.WHITE};
+  border-radius: 4px;
+  box-shadow: 1px 1px 5px 0 rgba(0, 0, 0, 0.2);
+
+  display: flex;
+  column-gap: 2px;
+
+  position: absolute;
+  top: 80%;
+  left: 8px;
+
+  z-index: 2;
+`;
+
+const colorIndexes = [
+  { color: "#ff7b7b", name: "red" },
+  { color: "#ffbc48", name: "orange" },
+  { color: "#fffd82", name: "yellow" },
+  { color: "#7bd18e", name: "green" },
+  { color: "#97e4f0", name: "skyblue" },
+  { color: "#4050ff", name: "blue" },
+  { color: "#c265fc", name: "purple" },
+  { color: "#ffffff", name: "white" },
+];
 interface DailyItemProps {
   text: string;
   isChecked: boolean;
+  colorIndex: string; // #ffffff
   onDelete: () => void;
   toggleCheckbox: () => void;
   updateTask: (text: string) => void;
+  updateTaskColorIndex: (colorIndex: string) => void;
 }
 
 const DailyItem = ({
   text,
   isChecked,
+  colorIndex,
   onDelete,
   toggleCheckbox,
   updateTask,
+  updateTaskColorIndex,
 }: DailyItemProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [inputText, setInputText] = useState(text);
 
+  const [isColorSelectPopupOpen, setIsColorSelectPopupOpen] = useState(false);
+
   return (
     <Wrapper>
+      <ColorIndex
+        color={
+          colorIndexes.find((index) => index.name === colorIndex)?.color ??
+          COLORS.WHITE
+        }
+        onClick={() => setIsColorSelectPopupOpen(true)}
+      />
+      {isColorSelectPopupOpen && (
+        <ColorSelectPopup>
+          {colorIndexes.map((item) => (
+            <Checkbox
+              key={item.name}
+              isChecked={colorIndex === item.name}
+              color={item.color}
+            >
+              <input
+                type="checkbox"
+                onChange={() => {
+                  updateTaskColorIndex(item.name);
+                  setIsColorSelectPopupOpen(false);
+                }}
+              />
+            </Checkbox>
+          ))}
+        </ColorSelectPopup>
+      )}
       <Checkbox isChecked={isChecked} tabIndex={0}>
         <input type="checkbox" onChange={toggleCheckbox} />
       </Checkbox>

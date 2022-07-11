@@ -13,6 +13,11 @@ interface WeeklyProps {
   toggleCheckbox: (id: number, taskId: number) => void;
   deleteTask: (id: number, taskId: number) => void;
   updateTask: (id: number, taskId: number, text: string) => void;
+  updateTaskColorIndex: (
+    id: number,
+    taskId: number,
+    colorIndex: string
+  ) => void;
 }
 
 const Weekly = ({
@@ -21,6 +26,7 @@ const Weekly = ({
   toggleCheckbox,
   deleteTask,
   updateTask,
+  updateTaskColorIndex,
 }: WeeklyProps) => {
   return (
     <Wrapper>
@@ -33,6 +39,9 @@ const Weekly = ({
             toggleCheckbox={(taskId) => toggleCheckbox(id, taskId)}
             deleteTask={(taskId) => deleteTask(id, taskId)}
             updateTask={(taskId, text) => updateTask(id, taskId, text)}
+            updateTaskColorIndex={(taskId, colorIndex) =>
+              updateTaskColorIndex(id, taskId, colorIndex)
+            }
           />
         </li>
       ))}

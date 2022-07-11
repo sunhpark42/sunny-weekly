@@ -12,6 +12,7 @@ export const getAWeekSchedules = (startDate = new Date()): Schedule[] => {
     return {
       id: idGenerator.getId({ type: "DAILY" }),
       date: currDay,
+      colorIndex: "white",
       day: Day[dayIndex] as unknown as Day,
       tasks: [],
     };
